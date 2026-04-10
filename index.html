@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOOK-O-MOTOR</title>
+  <style>
+    :root {
+      --green: #0b6f20;
+      --dark-green: #083d14;
+      --light-green: #2d8f44;
+      --gold: #ffc35f;
+      --gold-dark: #e6ad4f;
+      --white: #ffffff;
+      --gray-light: #f8f9fa;
+      --gray-medium: #e8ecf1;
+      --text-dark: #0f1419;
+      --text-muted: #6b7280;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; }
+    
+    body { 
+      margin: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; 
+      background: linear-gradient(135deg, #f8f9fa 0%, #eef2f8 100%); 
+      color: var(--text-dark); 
+      min-height: 100vh;
+    }
+    
+    .header { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 1.25rem 2rem; 
+      background: linear-gradient(135deg, var(--dark-green) 0%, var(--green) 100%); 
+      color: var(--white); 
+      position: sticky; 
+      top: 0; 
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .header h1 { 
+      margin: 0; 
+      font-size: 2rem; 
+      letter-spacing: 2px; 
+      color: var(--gold); 
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .header .btn { 
+      background: var(--gold); 
+      color: var(--dark-green); 
+      border: none; 
+      border-radius: 8px; 
+      padding: 0.75rem 1.5rem; 
+      font-size: 0.95rem; 
+      font-weight: 600; 
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .header .btn:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      background: var(--gold-dark);
+    }
+    
+    .header .btn:active { 
+      transform: translateY(0);
+    }
+    
+    .container { 
+      padding: 2rem 1.5rem; 
+      max-width: 1200px; 
+      margin: 0 auto; 
+    }
+    
+    .hidden { display: none !important; }
+    
+    .places-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .card { 
+      background: var(--white); 
+      border-radius: 16px; 
+      padding: 1rem; 
+      box-shadow: var(--shadow-sm); 
+      cursor: pointer; 
+      overflow: hidden; 
+      min-height: 260px; 
+      display: flex; 
+      flex-direction: column;
+      transition: var(--transition);
+      border: 1px solid var(--gray-medium);
+    }
+    
+    .card:hover { 
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--gold);
+    }
+    
+    .card img { 
+      width: 100%; 
+      aspect-ratio: 4/3; 
+      object-fit: cover; 
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+    }
+    
+    .card-name { 
+      margin: 0.5rem 0 0; 
+      font-size: 1.1rem; 
+      font-weight: 600; 
+      text-align: center; 
+      color: var(--green); 
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .section-title { 
+      text-align: center; 
+      font-size: 1.75rem; 
+      margin: 0 0 0.5rem; 
+      color: var(--green);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    
+    .map-box { 
+      border: 3px solid var(--gold); 
+      border-radius: 16px; 
+      overflow: hidden; 
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .map-box img { 
+      width: 100%; 
+      object-fit: cover; 
+      min-height: 300px; 
+    }
+    
+    .item-highlight { 
+      text-align: center; 
+      margin: 1.5rem auto; 
+      display: inline-block; 
+      width: 100%;
+      padding: 1rem 1.5rem; 
+      border-radius: 12px; 
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); 
+      color: var(--dark-green); 
+      font-size: 1.5rem; 
+      font-weight: 700;
+      box-shadow: var(--shadow-md);
+      letter-spacing: 0.5px;
+    }
+    
+    .terminal-item { 
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); 
+      color: var(--dark-green); 
+      border: none; 
+      border-radius: 10px; 
+      font-size: 1.05rem; 
+      font-weight: 600; 
+      padding: 1rem 1.5rem; 
+      cursor: pointer; 
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    
+    .terminal-item:hover { 
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .terminal-item:active {
+      transform: translateY(-2px);
+    }
+    
+    .info-row { 
+      display: flex; 
+      gap: 1.5rem; 
+      flex-wrap: wrap; 
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+    
+    .info-card { 
+      flex: 1 1 240px; 
+      background: var(--white); 
+      border-radius: 14px; 
+      padding: 1.5rem; 
+      box-shadow: var(--shadow-sm); 
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid var(--gray-medium);
+    }
+    
+    .info-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--light-green);
+    }
+    
+    .info-card h3 { 
+      margin: 0 0 1rem; 
+      font-size: 0.95rem; 
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .info-card .value { 
+      font-size: 2.5rem; 
+      font-weight: 700; 
+      color: var(--green);
+    }
+    
+    .table { 
+      width: 100%; 
+      border-collapse: separate; 
+      border-spacing: 0.75rem; 
+    }
+    
+    .table-cell { 
+      background: var(--white); 
+      border-radius: 10px; 
+      padding: 1rem; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      border: 1px solid var(--gray-medium);
+      transition: var(--transition);
+    }
+    
+    .table-cell:hover {
+      border-color: var(--gold);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .toggle-label { 
+      font-weight: 600; 
+      color: var(--text-dark);
+      font-size: 0.95rem;
+    }
+    
+    .toggle { 
+      accent-color: var(--green); 
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+    
+    .large { font-size: 2rem; }
+    
+    .link-like { color: var(--green); }
+    
+    .back-button { 
+      position: fixed; 
+      top: 4.5rem; 
+      left: 0.75rem; 
+      background: var(--white); 
+      color: var(--green); 
+      border: 2px solid var(--gold); 
+      border-radius: 10px; 
+      padding: 0.6rem 1rem; 
+      font-weight: 600; 
+      cursor: pointer; 
+      z-index: 201; 
+      margin-top: 0;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    
+    .back-button:hover {
+      background: var(--gray-light);
+      transform: translateX(-4px);
+    }
+    
+    .center-note { 
+      text-align: center; 
+      font-style: italic; 
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 1.5rem;
+    }
+    
+    .modal { 
+      position: fixed; 
+      z-index: 1000; 
+      left: 0; 
+      top: 0; 
+      width: 100%; 
+      height: 100%; 
+      overflow: auto; 
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content { 
+      background-color: var(--white); 
+      padding: 2rem; 
+      border: none;
+      width: 90%; 
+      max-width: 420px; 
+      border-radius: 16px; 
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .close { 
+      color: var(--text-muted); 
+      float: right; 
+      font-size: 28px; 
+      font-weight: 300; 
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .close:hover, .close:focus { 
+      color: var(--text-dark); 
+    }
+    
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--gray-medium);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: var(--gray-light);
+    }
+    
+    input[type="password"]:focus,
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(11, 111, 32, 0.1);
+      background: var(--white);
+    }
+    
+    input[type="password"]::placeholder,
+    input[type="text"]::placeholder {
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>LOOK-O-MOTOR</h1>
+    <button id="headerBtn" class="btn">Log-in</button>
+  </div>
+
+  <div class="container" id="userView">
+
+    <div class="section-title">Are you near the:</div>
+    <div class="places-grid" id="placesGrid"></div>
+  </div>
+
+  <div class="container hidden" id="placeDetails">
+    <div class="section-title">You are near the:</div>
+    <div class="item-highlight" id="selectedPlaceText"></div>
+
+    <div class="map-box">
+      <img id="selectedMapImg" src="https://via.placeholder.com/900x500?text=Map+image+coming+soon" alt="Map" />
+    </div>
+
+    <div class="info-row">
+      <div class="info-card"><h3>Nearest terminal:</h3><div id="nearestTerminalText">-</div></div>
+      <div class="info-card"><h3>Second nearest terminal:</h3><div id="secondTerminalText">-</div></div>
+    </div>
+    <div class="info-row">
+      <div class="info-card"><h3>Nearest terminal vehicles:</h3><div id="availableVehicleText" class="value">0</div></div>
+      <div class="info-card"><h3>Second terminal vehicles:</h3><div id="availableSecondVehicleText" class="value">0</div></div>
+    </div>
+
+    <p class="center-note">     </p>
+  </div>
+
+  <div class="container hidden" id="loginView">
+    <div class="section-title">Are you a UTS Driver?</div>
+    <div style="text-align:center; margin-top:2.5rem; padding:2rem;">
+      <label for="passkeyInput" style="font-size:1.3rem; color:var(--text-dark); font-weight:600; display:block; margin-bottom:1.5rem;">Insert Passkey</label>
+      <input id="passkeyInput" type="password" placeholder="Enter your passkey" style="width:100%; max-width:320px; margin:0 auto 1.5rem; padding:0.85rem 1rem; border:1px solid var(--gray-medium); border-radius:10px; font-size:1rem;" />
+      <button id="confirmLogin" class="btn" style="margin-top:0.5rem; min-width:140px; font-size:1rem;">Log-in</button>
+      <p id="loginError" style="color:#e53e3e; font-weight:600; margin-top:1rem; line-height:1.5;"></p>
+    </div>
+  </div>
+
+  <div class="container hidden" id="driverTerminalList">
+    <div class="section-title">You are at the:</div>
+    <div style="margin-top:1rem; display:grid; gap:0.75rem;">
+      <button data-terminal="CLSU Main Gate UTS Terminal" class="terminal-item">CLSU Main Gate UTS Terminal</button>
+      <button data-terminal="CLSU New Market UTS Terminal" class="terminal-item">CLSU New Market UTS Terminal</button>
+      <button data-terminal="CLSU OSA UTS Terminal" class="terminal-item">CLSU OSA UTS Terminal</button>
+      <button data-terminal="CLSU Oval UTS Terminal" class="terminal-item">CLSU Oval UTS Terminal</button>
+      <button data-terminal="CLSU Second Gate UTS Terminal" class="terminal-item">CLSU Second Gate UTS Terminal</button>
+    </div>
+
+    <div style="margin-top:2rem; text-align:center;">
+      <button id="openChangePasskey" class="btn">Change Passkey</button>
+    </div>
+  </div>
+
+  <div class="container hidden" id="driverTracker">
+    <div class="section-title">You are at the:</div>
+    <div class="item-highlight" id="trackerTerminalName"></div>
+
+    <div class="info-row" style="margin-top:0.8rem;">
+      <div class="info-card"><h3>Available drivers:</h3><div id="driverCount" class="value">0</div></div>
+    </div>
+
+    <div style="margin-top:1.5rem; background:var(--white); border-radius:14px; padding:1.5rem; box-shadow:var(--shadow-sm); border:1px solid var(--gray-medium);">
+      <div class="info-row" style="margin:0;">
+        <h3 style="margin:0; color:var(--text-dark); font-weight:600;">Driver availability</h3>
+        <button id="resetDrivers" class="btn" style="font-size:0.9rem; padding:0.6rem 1rem;">Reset All</button>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0.6rem; margin-top:0.8rem;">
+        <!-- 16 toggles added by JS -->
+      </div>
+    </div>
+
+    <p class="center-note" style="margin-top:0.8rem;">Click the tracker when you are available at the terminal.</p>
+  </div>
+
+  <div id="changePasskeyModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 style="margin:0 0 1.5rem; color:var(--text-dark); font-size:1.3rem; font-weight:600;">Change Passkey</h3>
+      <input type="password" id="currentPasskey" placeholder="Current Passkey" />
+      <input type="password" id="newPasskey" placeholder="New Passkey" />
+      <input type="password" id="confirmPasskey" placeholder="Confirm New Passkey" />
+      <button id="changePasskeyBtn" class="btn" style="min-width:120px; margin-top:0.5rem; width:100%;">Change</button>
+      <p id="changeError" style="color:#e53e3e; font-weight:600; margin-top:1rem;"></p>
+    </div>
+  </div>
+
+  <script>
+    let passkey = 'UTS_TERMINAL'; // Default, will be fetched from server
+    const API_BASE = 'https://your-backend-api.com'; // Replace with your actual API URL
+
+    async function fetchPasskey() {
+      try {
+        const response = await fetch(`${API_BASE}/passkey`);
+        if (response.ok) {
+          const data = await response.json();
+          passkey = data.passkey;
+        }
+      } catch (e) {
+        console.log('Using default passkey');
+      }
+    }
+
+    async function updatePasskey(newPass) {
+      try {
+        await fetch(`${API_BASE}/passkey`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ passkey: newPass })
+        });
+        passkey = newPass;
+      } catch (e) {
+        console.error('Failed to update passkey');
+      }
+    }
+
+    async function fetchDriverAvailable() {
+      try {
+        const response = await fetch(`${API_BASE}/driverAvailable`);
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (e) {
+        console.log('Using default driver states');
+      }
+      return {
+        'CLSU Main Gate UTS Terminal': Array(16).fill(false),
+        'CLSU New Market UTS Terminal': Array(16).fill(false),
+        'CLSU OSA UTS Terminal': Array(16).fill(false),
+        'CLSU Oval UTS Terminal': Array(16).fill(false),
+        'CLSU Second Gate UTS Terminal': Array(16).fill(false)
+      };
+    }
+
+    async function updateDriverAvailable(term, states) {
+      try {
+        await fetch(`${API_BASE}/driverAvailable`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ terminal: term, states })
+        });
+      } catch (e) {
+        console.error('Failed to update driver states');
+      }
+    }
+    const places = [
+      { name: 'CHSI Hospitality & Tourism Management & Culinary Arts', image:'A_LOC.png', map:'A_MAP.png', nearestTerminal:'CLSU Main Gate UTS Terminal', secondTerminal:'CLSU OSA UTS Terminal' },
+      { name: 'CLIRDEC', image:'B_LOC.jpg', map:'B_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'CLSUAAl Food Court (Alumni)', image:'C_LOC.png', map:'C_MAP.png', nearestTerminal:'CLSU OSA UTS Terminal', secondTerminal:'CLSU Main Gate UTS Terminal' },
+      { name: 'CLSU Auditorium', image:'D_LOC.png', map:'D_MAP.png', nearestTerminal:'CLSU Oval UTS Terminal', secondTerminal:'CLSU Main Gate UTS Terminal' },
+      { name: 'CLSU Graduation Site', image:'E_LOC.jpg', map:'E_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Main Gate UTS Terminal' },
+      { name: 'CLSU New Market', image:'F_LOC.jpg', map:'F_MAP.png', nearestTerminal:'CLSU New Market UTS Terminal', secondTerminal:'CLSU OSA UTS Terminal' },
+      { name: 'CLSU International Affairs Office', image:'G_LOC.png', map:'G_MAP.png', nearestTerminal:'CLSU OSA UTS Terminal', secondTerminal:'CLSU New Market UTS Terminal' },
+      { name: 'CLSU Jose Rizal Monument', image:'H_LOC.png', map:'H_MAP.png', nearestTerminal:'CLSU Oval UTS Terminal', secondTerminal:'CLSU Main Gate UTS Terminal' },
+      { name: 'CLSU Small Ruminant Center', image:'I_LOC.png', map:'I_MAP.png', nearestTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'CLSU Zen Garden', image:'J_LOC.png', map:'J_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Second Gate UTS Terminal' },
+      { name: 'College of Arts and Social Sciences', image:'K_LOC.jpg', map:'K_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'College of Business and Accountancy', image:'L_LOC.jpg', map:'L_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'College of Education', image:'M_LOC.jpg', map:'M_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'College of Engineering', image:'N_LOC.jpg', map:'N_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'College of Home Science and Industry', image:'O_LOC.jpg', map:'O_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'College of Science', image:'P_LOC.jpg', map:'P_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'College of Veterinary Science and Medicine', image:'Q_LOC.jpg', map:'Q_MAP.png', nearestTerminal:'CLSU Oval UTS Terminal', secondTerminal:'CLSU Second Gate UTS Terminal' },
+      { name: 'Lingap Kalikasan', image:'R_LOC.png', map:'R_MAP.png', nearestTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'Office of Admission', image:'S_LOC.jpg', map:'S_MAP.png', nearestTerminal:'CLSU Second Gate UTS Terminal', secondTerminal:'CLSU Oval UTS Terminal' },
+      { name: 'PCC at CLSU Dairy Outlet', image:'T_LOC.png', map:'T_MAP.png', nearestTerminal:'CLSU Oval UTS Terminal', secondTerminal:'CLSU Second Gate UTS Terminal' }
+    ];
+
+    const terminals = [
+      'CLSU Main Gate UTS Terminal',
+      'CLSU New Market UTS Terminal',
+      'CLSU OSA UTS Terminal',
+      'CLSU Oval UTS Terminal',
+      'CLSU Second Gate UTS Terminal'
+    ];
+
+    let state = {
+      selectedPlace: null,
+      selectedTerminal: null,
+      driverAvailable: {}
+    };
+
+    // Load data on page load
+    window.addEventListener('load', async () => {
+      await fetchPasskey();
+      state.driverAvailable = await fetchDriverAvailable();
+      renderPlaces();
+      setView('userView');
+    });
+
+    const userView = document.getElementById('userView');
+    const placeDetails = document.getElementById('placeDetails');
+    const loginView = document.getElementById('loginView');
+    const driverTerminalList = document.getElementById('driverTerminalList');
+    const driverTracker = document.getElementById('driverTracker');
+
+    const placesGrid = document.getElementById('placesGrid');
+    const selectedPlaceText = document.getElementById('selectedPlaceText');
+    const selectedMapImg = document.getElementById('selectedMapImg');
+    const nearestTerminalText = document.getElementById('nearestTerminalText');
+    const availableVehicleText = document.getElementById('availableVehicleText');
+
+    const trackerTerminalName = document.getElementById('trackerTerminalName');
+    const driverCountEl = document.getElementById('driverCount');
+
+    function renderPlaces() {
+      placesGrid.innerHTML = '';
+      places.forEach((place,index)=>{
+        const card = document.createElement('div');
+        card.className='card';
+        card.dataset.index=index;
+        card.innerHTML=`<img src="${place.image}" alt="${place.name}" /><p class="card-name">${place.name}</p>`;
+        card.addEventListener('click',()=>showPlaceDetails(index));
+        placesGrid.appendChild(card);
+      });
+    }
+
+    function showPlaceDetails(index){
+      const place = places[index];
+      state.selectedPlace = place;
+      selectedPlaceText.textContent = place.name;
+      selectedMapImg.src = place.map;
+      nearestTerminalText.textContent = place.nearestTerminal;
+      secondTerminalText.textContent = place.secondTerminal || place.nearestTerminal;
+      updateAvailableVehicle();
+      setView('placeDetails');
+    }
+
+    function updateAvailableVehicle(){
+      if(!state.selectedPlace) return;
+      const term = state.selectedPlace.nearestTerminal;
+      const secondTerm = state.selectedPlace.secondTerminal || state.selectedPlace.nearestTerminal;
+
+      const available = (state.driverAvailable[term] || []).filter(v=>v).length;
+      const secondAvailable = (state.driverAvailable[secondTerm] || []).filter(v=>v).length;
+
+      availableVehicleText.textContent = available;
+      availableSecondVehicleText.textContent = secondAvailable;
+
+      availableVehicleText.onclick = null;
+      availableSecondVehicleText.onclick = null;
+      availableVehicleText.style.cursor = 'default';
+      availableSecondVehicleText.style.cursor = 'default';
+    }
+
+    function showDriverTracker(term){
+      state.selectedTerminal = term;
+      trackerTerminalName.textContent = term;
+      renderDriverToggles(term);
+      setView('driverTracker');
+    }
+
+    function renderDriverToggles(term){
+      const wrapper = driverTracker.querySelector('div:nth-child(3) > div');
+      wrapper.innerHTML = '';
+      const arr = state.driverAvailable[term];
+      arr.forEach((isAvailable, idx)=>{
+        const cell = document.createElement('div');
+        cell.className='table-cell';
+        cell.innerHTML = `<span class="toggle-label">DRIVER ${idx+1}</span><label><input type="checkbox" class="toggle" data-index="${idx}" ${isAvailable?'checked':''} /> ${isAvailable?'Available':'Unavailable'}</label>`;
+        wrapper.appendChild(cell);
+      });
+
+      wrapper.querySelectorAll('.toggle').forEach(el=>{
+        el.addEventListener('change', async e=>{
+          const idx = Number(e.target.dataset.index);
+          state.driverAvailable[term][idx] = e.target.checked;
+          await updateDriverAvailable(term, state.driverAvailable[term]);
+          setTimeout(()=>{
+            driverCountEl.textContent = state.driverAvailable[term].filter(v=>v).length;
+            updateAvailableVehicle();
+            cellTextUpdate(wrapper, idx, e.target.checked);
+          }, 0);
+        });
+      });
+
+      driverCountEl.textContent = arr.filter(v=>v).length;
+    }
+
+    function cellTextUpdate(wrapper, idx, available){
+      const target = wrapper.querySelector(`[data-index="${idx}"]`).parentElement;
+      target.innerHTML = `<span class="toggle-label">DRIVER ${idx+1}</span><label><input type="checkbox" class="toggle" data-index="${idx}" ${available?'checked':''}/> ${available?'Available':'Unavailable'}</label>`;
+      renderDriverToggles(state.selectedTerminal);
+    }
+
+    async function resetDrivers(){
+      const term = state.selectedTerminal;
+      if(!term) return;
+      state.driverAvailable[term] = Array(16).fill(false);
+      await updateDriverAvailable(term, state.driverAvailable[term]);
+      renderDriverToggles(term);
+      updateAvailableVehicle();
+    }
+
+    const headerBtn = document.getElementById('headerBtn');
+
+    function setView(active){
+      [userView, placeDetails, loginView, driverTerminalList, driverTracker].forEach(v=>v.classList.add('hidden'));
+
+      if(active==='userView'){
+        headerBtn.classList.remove('hidden');
+        headerBtn.textContent='Log-in';
+        headerBtn.onclick = () => {
+          setView('loginView');
+          document.getElementById('loginError').textContent = '';
+          document.getElementById('passkeyInput').value = '';
+        };
+        userView.classList.remove('hidden');
+      } else {
+        headerBtn.classList.remove('hidden');
+        headerBtn.textContent='Back';
+        headerBtn.onclick = () => {
+          if(active==='driverTracker') setView('driverTerminalList');
+          else setView('userView');
+        };
+      }
+
+      if(active==='placeDetails') placeDetails.classList.remove('hidden');
+      if(active==='loginView') loginView.classList.remove('hidden');
+      if(active==='driverTerminalList'){
+        driverTerminalList.classList.remove('hidden');
+        document.getElementById('changeError').textContent = '';
+      }
+      if(active==='driverTracker') driverTracker.classList.remove('hidden');
+    }
+
+    document.getElementById('confirmLogin').addEventListener('click', ()=>{
+      const passkeyInput = document.getElementById('passkeyInput').value.trim();
+      const err = document.getElementById('loginError');
+      if(passkeyInput === passkey){
+        err.textContent = '';
+        setView('driverTerminalList');
+      } else {
+        err.textContent = 'Invalid passkey';
+      }
+    });
+
+    document.getElementById('changePasskeyBtn').addEventListener('click', async ()=>{
+      const current = document.getElementById('currentPasskey').value.trim();
+      const newP = document.getElementById('newPasskey').value.trim();
+      const confirmP = document.getElementById('confirmPasskey').value.trim();
+      const err = document.getElementById('changeError');
+      if(current === passkey && newP && newP === confirmP){
+        await updatePasskey(newP);
+        err.textContent = 'Passkey changed successfully!';
+        err.style.color = 'green';
+        document.getElementById('currentPasskey').value = '';
+        document.getElementById('newPasskey').value = '';
+        document.getElementById('confirmPasskey').value = '';
+        setTimeout(() => {
+          document.getElementById('changePasskeyModal').classList.add('hidden');
+        }, 1000);
+      } else if(current !== passkey){
+        err.textContent = 'Current passkey is incorrect.';
+        err.style.color = '#d00';
+      } else if(newP !== confirmP){
+        err.textContent = 'New passkey and confirmation do not match.';
+        err.style.color = '#d00';
+      } else {
+        err.textContent = 'Please enter a new passkey.';
+        err.style.color = '#d00';
+      }
+    });
+
+    document.getElementById('openChangePasskey').addEventListener('click', ()=>{
+      document.getElementById('changePasskeyModal').classList.remove('hidden');
+      document.getElementById('changeError').textContent = '';
+      document.getElementById('currentPasskey').value = '';
+      document.getElementById('newPasskey').value = '';
+      document.getElementById('confirmPasskey').value = '';
+    });
+
+    document.querySelector('.close').addEventListener('click', ()=>{
+      document.getElementById('changePasskeyModal').classList.add('hidden');
+    });
+
+    window.addEventListener('click', (event)=>{
+      const modal = document.getElementById('changePasskeyModal');
+      if(event.target === modal){
+        modal.classList.add('hidden');
+      }
+    });
+
+    driverTerminalList.querySelectorAll('.terminal-item').forEach(btn=>{
+      btn.addEventListener('click', ()=> { showDriverTracker(btn.dataset.terminal); });
+    });
+
+    document.getElementById('resetDrivers').addEventListener('click', resetDrivers);
+  </script>
+</body>
+</html>
